@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-function Circle(props) {
+const Plus = props => {
   const { color, size, ...otherProps } = props;
   return (
     <svg
@@ -11,24 +11,25 @@ function Circle(props) {
       viewBox="0 0 24 24"
       fill="none"
       stroke={color}
-      strokeWidth="1"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
       {...otherProps}
     >
-      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="5" x2="12" y2="19" />
+      <line x1="5" y1="12" x2="19" y2="12" />
     </svg>
   );
-}
+};
 
-Circle.propTypes = {
+Plus.propTypes = {
   color: PropTypes.string,
   size: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 
-Circle.defaultProps = {
+Plus.defaultProps = {
   color: "currentColor",
   size: "24"
 };
 
-export default Circle;
+export default Plus;
