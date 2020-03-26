@@ -80,7 +80,20 @@ function App() {
       ]
     }
   ]);
-  const [task, setTask] = useState();
+
+  function handleComplete(task) {
+    const newLists = lists.map(list => {
+      const newTasks = list.tasks.map(todo => {
+        if (todo.id === task.id) {
+          return { ...todo, completed: !todo.completed };
+        }
+        return todo;
+      });
+      return { ...list, tasks: newTasks };
+    });
+    setLists(newLists);
+  }
+
   return (
     <MainContainer>
       <Sidebar>
@@ -99,8 +112,8 @@ function App() {
           list.id === activeList
             ? list.tasks.map(task => (
                 <IconTextWrapper>
-                  <StyledButton>
-                    <Circle />
+                  <StyledButton onClick={() => handleComplete(task)}>
+                    {task.completed ? <CheckCircle /> : <Circle />}
                   </StyledButton>
                   <Text>{task.text}</Text>
                 </IconTextWrapper>
