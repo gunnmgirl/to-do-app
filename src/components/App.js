@@ -60,26 +60,7 @@ function handleOnSubmit(e, input, setInput, lists, activeList) {
 function App() {
   const [activeList, setActiveList] = useState(null);
   const [input, setInput] = useState("");
-  const [lists, setLists] = useState([
-    {
-      id: nanoid(),
-      name: "prva",
-      tasks: [
-        { text: "1", id: nanoid(), completed: false },
-        { text: "2", id: nanoid(), completed: false },
-        { text: "3", id: nanoid(), completed: false }
-      ]
-    },
-    {
-      id: nanoid(),
-      name: "druga",
-      tasks: [
-        { text: "4", id: nanoid(), completed: false },
-        { text: "5", id: nanoid(), completed: false },
-        { text: "6", id: nanoid(), completed: false }
-      ]
-    }
-  ]);
+  const [lists, setLists] = useState([]);
 
   function handleComplete(task) {
     const newLists = lists.map(list => {
