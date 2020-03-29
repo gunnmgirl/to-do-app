@@ -7,8 +7,8 @@ const InputBox = styled.input`
   border: 0;
 `;
 
-const IconTextWrapper = styled.div`
-  border-bottom: 0.5px solid #e6e6e6;
+const ListIconTextWrapper = styled.div`
+  border-bottom: none;
   padding-bottom: 10px;
   padding-top: 10px;
   display: flex;
@@ -38,7 +38,7 @@ function Form({ lists, setLists, placeholder }) {
         handleOnSubmit(event, lists, setLists, input, setInput)
       }
     >
-      <IconTextWrapper>
+      <ListIconTextWrapper>
         <StyledButton>
           <Plus color="#3385ff" />
         </StyledButton>
@@ -47,7 +47,7 @@ function Form({ lists, setLists, placeholder }) {
           onChange={event => setInput(event.target.value)}
           value={input}
         />
-      </IconTextWrapper>
+      </ListIconTextWrapper>
     </form>
   );
 }

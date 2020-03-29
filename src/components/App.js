@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import nanoid from "nanoid";
 
@@ -8,7 +8,15 @@ import Plus from "./Plus";
 import Form from "./Form";
 import List from "./List";
 
-const IconTextWrapper = styled.div`
+const ListIconTextWrapper = styled.div`
+  border-bottom: none;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  display: flex;
+  align-items: center;
+`;
+
+const TaskIconTextWrapper = styled.div`
   border-bottom: 0.5px solid #e6e6e6;
   padding-bottom: 10px;
   padding-top: 10px;
@@ -43,24 +51,25 @@ const MainContainer = styled.div`
   display: flex;
   flex-direction: row;
 `;
+
 const Tasks = styled.div`
   width: 70%;
 `;
 
-function handleOnSubmit(e, input, setInput, lists, activeList) {
-  e.preventDefault();
-  lists.map(list =>
-    list.id === activeList
-      ? list.tasks.push({ text: input, id: nanoid(), completed: false })
-      : list.tasks
-  );
-  setInput("");
-}
+const ListTitle = styled.span`
+  font-family: "Roboto", sans-serif;
+  color: #3e69e4;
+  font-size: 1rem;
+  font-weight: 100;
+  padding-left: 8px;
+`;
 
 function App() {
   const [activeList, setActiveList] = useState(null);
   const [input, setInput] = useState("");
-  const [lists, setLists] = useState([]);
+  const [lists, setLists] = useState(
+    JSON.parse(localStorage.getItem("Lists")) || []
+  );
 
   function handleComplete(task) {
     const newLists = lists.map(list => {
@@ -75,47 +84,71 @@ function App() {
     setLists(newLists);
   }
 
+  function handleOnSubmit(e, input, setInput, lists, activeList) {
+    e.preventDefault();
+    lists.map(list =>
+      list.id === activeList
+        ? list.tasks.push({ text: input, id: nanoid(), completed: false })
+        : list.tasks
+    );
+    localStorage.setItem("Lists", JSON.stringify(lists));
+    setInput("");
+  }
+
+  useEffect(() => {
+    localStorage.setItem("Lists", JSON.stringify(lists));
+  }, [lists]);
+
   return (
     <MainContainer>
       <Sidebar>
         {lists.map(list => (
-          <IconTextWrapper>
+          <ListIconTextWrapper>
             <StyledButton>
               <List color="#3385ff" />
             </StyledButton>
             <Text onClick={() => setActiveList(list.id)}>{list.name}</Text>
-          </IconTextWrapper>
+          </ListIconTextWrapper>
         ))}
         <Form lists={lists} setLists={setLists} placeholder="New list" />
       </Sidebar>
       <Tasks>
         {lists.map(list =>
-          list.id === activeList
-            ? list.tasks.map(task => (
-                <IconTextWrapper>
+          list.id === activeList ? (
+            <>
+              <ListTitle>{list.name}</ListTitle>
+              {list.tasks.map(task => (
+                <TaskIconTextWrapper>
                   <StyledButton onClick={() => handleComplete(task)}>
                     {task.completed ? <CheckCircle /> : <Circle />}
                   </StyledButton>
                   <Text>{task.text}</Text>
-                </IconTextWrapper>
-              ))
-            : null
+                </TaskIconTextWrapper>
+              ))}
+            </>
+          ) : null
         )}
 
-        <form
-          onSubmit={e => handleOnSubmit(e, input, setInput, lists, activeList)}
-        >
-          <IconTextWrapper>
-            <StyledButton>
-              <Circle />
-            </StyledButton>
-            <InputBox
-              placeholder="Add a task"
-              value={input}
-              onChange={e => setInput(e.target.value)}
-            />
-          </IconTextWrapper>
-        </form>
+        {activeList ? (
+          <>
+            <form
+              onSubmit={e =>
+                handleOnSubmit(e, input, setInput, lists, activeList)
+              }
+            >
+              <TaskIconTextWrapper>
+                <StyledButton>
+                  <Plus color="#3385ff" />
+                </StyledButton>
+                <InputBox
+                  placeholder="Add a task"
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                />
+              </TaskIconTextWrapper>
+            </form>
+          </>
+        ) : null}
       </Tasks>
     </MainContainer>
   );
