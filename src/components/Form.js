@@ -25,7 +25,7 @@ function handleOnSubmit(e, lists, setLists, input, setInput) {
   e.preventDefault();
   const id = nanoid();
   input
-    ? setLists([...lists, { id, name: input, tasks: [] }])
+    ? setLists([...lists, { id, name: input, editMode: false, tasks: [] }])
     : setLists([...lists]);
   setInput("");
 }

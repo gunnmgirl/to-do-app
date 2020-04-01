@@ -21,6 +21,7 @@ const TaskIconTextWrapper = styled.div`
   padding-bottom: 10px;
   padding-top: 10px;
   display: flex;
+  flex-direction: row;
   align-items: center;
 `;
 
@@ -53,23 +54,24 @@ const MainContainer = styled.div`
 `;
 
 const Tasks = styled.div`
-  width: 70%;
+  width: 80%;
 `;
 
 const ListTitle = styled.span`
   font-family: "Roboto", sans-serif;
-  color: #3e69e4;
+  color: #3385ff;
   font-size: 1rem;
-  font-weight: 100;
+  font-weight: 500;
   padding-left: 8px;
 `;
 
 function App() {
-  const [activeList, setActiveList] = useState(null);
   const [input, setInput] = useState("");
   const [lists, setLists] = useState(
     JSON.parse(localStorage.getItem("Lists")) || []
   );
+  const [activeList, setActiveList] = useState(null);
+  const [editedInput, setEditedInput] = useState("");
 
   function handleComplete(task) {
     const newLists = lists.map(list => {
@@ -95,6 +97,52 @@ function App() {
     setInput("");
   }
 
+  function handleEditTitle(e) {
+    e.preventDefault();
+    const newList = lists.map(list =>
+      list.id === activeList
+        ? { ...list, name: editedInput, editMode: false }
+        : { ...list }
+    );
+    setEditedInput("");
+    setLists(newList);
+  }
+
+  function changeEditMode() {
+    const newList = lists.map(list =>
+      list.id === activeList
+        ? { ...list, editMode: !list.editMode }
+        : { ...list }
+    );
+    setLists(newList);
+  }
+
+  function setActiveListandEditedInput(list) {
+    setActiveList(list.id);
+    setEditedInput(list.name);
+  }
+
+  useEffect(() => {
+    function handleDeleteList() {
+      const newList = lists.filter(list => {
+        return list.id !== activeList;
+      });
+      setActiveList(null);
+      setLists(newList);
+    }
+
+    const handleEsc = event => {
+      if (event.keyCode === 46) {
+        handleDeleteList();
+      }
+    };
+    window.addEventListener("keydown", handleEsc);
+
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, [activeList]);
+
   useEffect(() => {
     localStorage.setItem("Lists", JSON.stringify(lists));
   }, [lists]);
@@ -107,27 +155,51 @@ function App() {
             <StyledButton>
               <List color="#3385ff" />
             </StyledButton>
-            <Text onClick={() => setActiveList(list.id)}>{list.name}</Text>
+            <Text
+              onClick={() => setActiveListandEditedInput(list)}
+              key={list.id}
+            >
+              {list.name}
+            </Text>
           </ListIconTextWrapper>
         ))}
         <Form lists={lists} setLists={setLists} placeholder="New list" />
       </Sidebar>
       <Tasks>
-        {lists.map(list =>
-          list.id === activeList ? (
+        {lists.map(list => {
+          return list.id === activeList ? (
             <>
-              <ListTitle>{list.name}</ListTitle>
+              {list.editMode ? (
+                <form
+                  onSubmit={e => handleEditTitle(e)}
+                  onBlur={() => changeEditMode()}
+                >
+                  <InputBox
+                    defaultValue={list.name}
+                    onChange={e => setEditedInput(e.target.value)}
+                    autoFocus
+                  />
+                </form>
+              ) : (
+                <ListTitle onClick={() => changeEditMode()}>
+                  {list.name}
+                </ListTitle>
+              )}
               {list.tasks.map(task => (
                 <TaskIconTextWrapper>
                   <StyledButton onClick={() => handleComplete(task)}>
-                    {task.completed ? <CheckCircle /> : <Circle />}
+                    {task.completed ? (
+                      <CheckCircle color="#3385ff" />
+                    ) : (
+                      <Circle color="#8c8c8c" />
+                    )}
                   </StyledButton>
                   <Text>{task.text}</Text>
                 </TaskIconTextWrapper>
               ))}
             </>
-          ) : null
-        )}
+          ) : null;
+        })}
 
         {activeList ? (
           <>
