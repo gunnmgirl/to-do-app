@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import nanoid from "nanoid";
 
 import CheckCircle from "./CheckCircle";
@@ -7,6 +7,16 @@ import Circle from "./Circle";
 import Plus from "./Plus";
 import Form from "./Form";
 import List from "./List";
+
+const GlobalStyle = createGlobalStyle`
+* {
+  box-sizing: border-box;
+}
+  body {
+    margin: 0;
+    padding: 0;
+  }
+`;
 
 const ListIconTextWrapper = styled.div`
   border-bottom: none;
@@ -18,11 +28,14 @@ const ListIconTextWrapper = styled.div`
 
 const TaskIconTextWrapper = styled.div`
   border-bottom: 0.5px solid #e6e6e6;
-  padding-bottom: 10px;
-  padding-top: 10px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  margin-bottom: 10px;
+  margin-top: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  background-color: rgb(255, 255, 255);
 `;
 
 const InputBox = styled.input`
@@ -40,28 +53,48 @@ const Text = styled.span`
 const StyledButton = styled.button`
   border: 0;
   padding-right: 14px;
-  background-color: #ffffff;
+  margin-left: 6px;
+  background-color: rgb(255, 255, 255);
 `;
 
 const Sidebar = styled.div`
   width: 20%;
-  height: 100%;
 `;
 
 const MainContainer = styled.div`
   display: flex;
   flex-direction: row;
+  min-height: 100vh;
 `;
 
 const Tasks = styled.div`
   width: 80%;
+  padding-top: 10px;
 `;
 
 const ListTitle = styled.span`
   font-family: "Roboto", sans-serif;
-  color: #3385ff;
+  color: rgb(255, 255, 255);
   font-size: 1rem;
   font-weight: 500;
+  padding-left: 8px;
+`;
+
+const Header = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100px;
+  align-items: left;
+  justify-content: center;
+  background: url(${props => props.theme});
+  background-size: cover;
+  background-position: center;
+  opacity: 0.9;
+`;
+
+const EditTitleInput = styled.input`
+  background: transparent;
+  border: none;
   padding-left: 8px;
 `;
 
@@ -72,6 +105,13 @@ function App() {
   );
   const [activeList, setActiveList] = useState(null);
   const [editedInput, setEditedInput] = useState("");
+
+  var date = new Date();
+  const dd = String(date.getDate()).padStart(2, "0");
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const yyyy = date.getFullYear();
+
+  const today = dd + "/" + mm + "/" + yyyy;
 
   function handleComplete(task) {
     const newLists = lists.map(list => {
@@ -148,81 +188,87 @@ function App() {
   }, [lists]);
 
   return (
-    <MainContainer>
-      <Sidebar>
-        {lists.map(list => (
-          <ListIconTextWrapper>
-            <StyledButton>
-              <List color="#3385ff" />
-            </StyledButton>
-            <Text
-              onClick={() => setActiveListandEditedInput(list)}
-              key={list.id}
-            >
-              {list.name}
-            </Text>
-          </ListIconTextWrapper>
-        ))}
-        <Form lists={lists} setLists={setLists} placeholder="New list" />
-      </Sidebar>
-      <Tasks>
-        {lists.map(list => {
-          return list.id === activeList ? (
-            <>
-              {list.editMode ? (
-                <form
-                  onSubmit={e => handleEditTitle(e)}
-                  onBlur={() => changeEditMode()}
-                >
-                  <InputBox
-                    defaultValue={list.name}
-                    onChange={e => setEditedInput(e.target.value)}
-                    autoFocus
-                  />
-                </form>
-              ) : (
-                <ListTitle onClick={() => changeEditMode()}>
-                  {list.name}
-                </ListTitle>
-              )}
-              {list.tasks.map(task => (
-                <TaskIconTextWrapper>
-                  <StyledButton onClick={() => handleComplete(task)}>
-                    {task.completed ? (
-                      <CheckCircle color="#3385ff" />
-                    ) : (
-                      <Circle color="#8c8c8c" />
-                    )}
-                  </StyledButton>
-                  <Text>{task.text}</Text>
-                </TaskIconTextWrapper>
-              ))}
-            </>
-          ) : null;
-        })}
+    <>
+      <GlobalStyle />
+      <MainContainer>
+        <Sidebar>
+          {lists.map(list => (
+            <ListIconTextWrapper>
+              <StyledButton>
+                <List color="#3385ff" />
+              </StyledButton>
+              <Text
+                onClick={() => setActiveListandEditedInput(list)}
+                key={list.id}
+              >
+                {list.name}
+              </Text>
+            </ListIconTextWrapper>
+          ))}
+          <Form lists={lists} setLists={setLists} placeholder="New list" />
+        </Sidebar>
+        <Tasks>
+          {lists.map(list => {
+            return list.id === activeList ? (
+              <>
+                <Header theme={list.theme}>
+                  {list.editMode ? (
+                    <form
+                      onSubmit={e => handleEditTitle(e)}
+                      onBlur={() => changeEditMode()}
+                    >
+                      <EditTitleInput
+                        defaultValue={list.name}
+                        onChange={e => setEditedInput(e.target.value)}
+                        autoFocus
+                      />
+                    </form>
+                  ) : (
+                    <ListTitle onClick={() => changeEditMode()}>
+                      {list.name}
+                    </ListTitle>
+                  )}
+                  <ListTitle>{today}</ListTitle>
+                </Header>
+                {list.tasks.map(task => (
+                  <TaskIconTextWrapper>
+                    <StyledButton onClick={() => handleComplete(task)}>
+                      {task.completed ? (
+                        <CheckCircle color="#3385ff" />
+                      ) : (
+                        <Circle color="#8c8c8c" />
+                      )}
+                    </StyledButton>
+                    <Text completed={task.completed}>{task.text}</Text>
+                  </TaskIconTextWrapper>
+                ))}
+              </>
+            ) : null;
+          })}
 
-        {activeList ? (
-          <>
-            <form
-              onSubmit={e =>
-                handleOnSubmit(e, input, setInput, lists, activeList)
-              }
-            >
-              <TaskIconTextWrapper>
-                <StyledButton>
-                  <Plus color="#3385ff" />
-                </StyledButton>
-                <InputBox
-                  placeholder="Add a task"
-                  value={input}
-                  onChange={e => setInput(e.target.value)}
-                />
-              </TaskIconTextWrapper>
-            </form>
-          </>
-        ) : null}
-      </Tasks>
-    </MainContainer>
+          {activeList ? (
+            <>
+              <form
+                onSubmit={e =>
+                  handleOnSubmit(e, input, setInput, lists, activeList)
+                }
+              >
+                <TaskIconTextWrapper>
+                  <StyledButton>
+                    <Plus color="#3385ff" />
+                  </StyledButton>
+                  <InputBox
+                    placeholder="Add a task"
+                    value={input}
+                    onChange={e => setInput(e.target.value)}
+                  />
+                </TaskIconTextWrapper>
+              </form>
+            </>
+          ) : null}
+        </Tasks>
+      </MainContainer>
+    </>
   );
 }
 

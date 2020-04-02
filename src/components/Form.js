@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import nanoid from "nanoid";
 import Plus from "./Plus";
+import unsplash from "./Unsplash";
 
 const InputBox = styled.input`
   border: 0;
@@ -21,17 +22,32 @@ const StyledButton = styled.button`
   background-color: #ffffff;
 `;
 
-function handleOnSubmit(e, lists, setLists, input, setInput) {
+async function handleOnSubmit(e, lists, setLists, input, setInput) {
   e.preventDefault();
+  const response = await unsplash.get("/photos/random", {
+    params: {
+      query: "color wallpapers"
+    }
+  });
   const id = nanoid();
   input
-    ? setLists([...lists, { id, name: input, editMode: false, tasks: [] }])
+    ? setLists([
+        ...lists,
+        {
+          id,
+          name: input,
+          editMode: false,
+          theme: response.data.urls.regular,
+          tasks: []
+        }
+      ])
     : setLists([...lists]);
   setInput("");
 }
 
 function Form({ lists, setLists, placeholder }) {
   const [input, setInput] = useState("");
+
   return (
     <form
       onSubmit={event =>
