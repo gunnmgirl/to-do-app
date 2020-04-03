@@ -89,13 +89,14 @@ const Header = styled.div`
   background: url(${props => props.theme});
   background-size: cover;
   background-position: center;
-  opacity: 0.9;
 `;
 
 const EditTitleInput = styled.input`
-  background: transparent;
-  border: none;
+  background-color: transparent;
+  border: 0;
+  color: rgb(255, 255, 255);
   padding-left: 8px;
+  font-size: 1rem;
 `;
 
 function App() {
@@ -144,7 +145,6 @@ function App() {
         ? { ...list, name: editedInput, editMode: false }
         : { ...list }
     );
-    setEditedInput("");
     setLists(newList);
   }
 
@@ -171,17 +171,17 @@ function App() {
       setLists(newList);
     }
 
-    const handleEsc = event => {
+    const handleDel = event => {
       if (event.keyCode === 46) {
         handleDeleteList();
       }
     };
-    window.addEventListener("keydown", handleEsc);
+    window.addEventListener("keydown", handleDel);
 
     return () => {
-      window.removeEventListener("keydown", handleEsc);
+      window.removeEventListener("keydown", handleDel);
     };
-  }, [activeList]);
+  }, [activeList, lists]);
 
   useEffect(() => {
     localStorage.setItem("Lists", JSON.stringify(lists));
