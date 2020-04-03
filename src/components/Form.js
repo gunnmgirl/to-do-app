@@ -9,7 +9,7 @@ const InputBox = styled.input`
 `;
 
 const ListIconTextWrapper = styled.div`
-  border-bottom: none;
+  border-bottom: 0;
   padding-bottom: 10px;
   padding-top: 10px;
   display: flex;
@@ -19,41 +19,38 @@ const ListIconTextWrapper = styled.div`
 const StyledButton = styled.button`
   border: 0;
   padding-right: 14px;
+  margin-left: 6px;
   background-color: #ffffff;
 `;
-
-async function handleOnSubmit(e, lists, setLists, input, setInput) {
-  e.preventDefault();
-  const response = await unsplash.get("/photos/random", {
-    params: {
-      query: "color wallpapers"
-    }
-  });
-  const id = nanoid();
-  input
-    ? setLists([
-        ...lists,
-        {
-          id,
-          name: input,
-          editMode: false,
-          theme: response.data.urls.regular,
-          tasks: []
-        }
-      ])
-    : setLists([...lists]);
-  setInput("");
-}
 
 function Form({ lists, setLists, placeholder }) {
   const [input, setInput] = useState("");
 
-  return (
-    <form
-      onSubmit={event =>
-        handleOnSubmit(event, lists, setLists, input, setInput)
+  async function handleOnSubmit(e) {
+    e.preventDefault();
+    const response = await unsplash.get("/photos/random", {
+      params: {
+        query: "color wallpapers"
       }
-    >
+    });
+    const id = nanoid();
+    input
+      ? setLists([
+          ...lists,
+          {
+            id,
+            name: input,
+            editMode: false,
+            theme: response.data.urls.regular,
+            tasks: []
+          }
+        ])
+      : setLists([...lists]);
+    setInput("");
+  }
+
+  return (
+    <form onSubmit={event => handleOnSubmit(event)}>
       <ListIconTextWrapper>
         <StyledButton>
           <Plus color="#3385ff" />

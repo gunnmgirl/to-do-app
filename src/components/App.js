@@ -18,14 +18,6 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
-const ListIconTextWrapper = styled.div`
-  border-bottom: none;
-  padding-bottom: 10px;
-  padding-top: 10px;
-  display: flex;
-  align-items: center;
-`;
-
 const TaskIconTextWrapper = styled.div`
   border-bottom: 0.5px solid #e6e6e6;
   padding-top: 4px;
@@ -36,6 +28,10 @@ const TaskIconTextWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   background-color: rgb(255, 255, 255);
+`;
+
+const ListIconTextWrapper = styled(TaskIconTextWrapper)`
+  border-bottom: 0;
 `;
 
 const InputBox = styled.input`
@@ -81,11 +77,8 @@ const ListTitle = styled.span`
 `;
 
 const Header = styled.div`
-  display: flex;
-  flex-direction: column;
   height: 100px;
-  align-items: left;
-  justify-content: center;
+
   background: url(${props => props.theme});
   background-size: cover;
   background-position: center;
@@ -97,6 +90,15 @@ const EditTitleInput = styled.input`
   color: rgb(255, 255, 255);
   padding-left: 8px;
   font-size: 1rem;
+`;
+
+const ImageTitleWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  height: 100px;
+  background-color: rgba(0, 0, 0, 0.1);
 `;
 
 function App() {
@@ -127,7 +129,7 @@ function App() {
     setLists(newLists);
   }
 
-  function handleOnSubmit(e, input, setInput, lists, activeList) {
+  function handleOnSubmit(e) {
     e.preventDefault();
     lists.map(list =>
       list.id === activeList
@@ -212,23 +214,25 @@ function App() {
             return list.id === activeList ? (
               <>
                 <Header theme={list.theme}>
-                  {list.editMode ? (
-                    <form
-                      onSubmit={e => handleEditTitle(e)}
-                      onBlur={() => changeEditMode()}
-                    >
-                      <EditTitleInput
-                        defaultValue={list.name}
-                        onChange={e => setEditedInput(e.target.value)}
-                        autoFocus
-                      />
-                    </form>
-                  ) : (
-                    <ListTitle onClick={() => changeEditMode()}>
-                      {list.name}
-                    </ListTitle>
-                  )}
-                  <ListTitle>{today}</ListTitle>
+                  <ImageTitleWrapper>
+                    {list.editMode ? (
+                      <form
+                        onSubmit={e => handleEditTitle(e)}
+                        onBlur={() => changeEditMode()}
+                      >
+                        <EditTitleInput
+                          defaultValue={list.name}
+                          onChange={e => setEditedInput(e.target.value)}
+                          autoFocus
+                        />
+                      </form>
+                    ) : (
+                      <ListTitle onClick={() => changeEditMode()}>
+                        {list.name}
+                      </ListTitle>
+                    )}
+                    <ListTitle>{today}</ListTitle>
+                  </ImageTitleWrapper>
                 </Header>
                 {list.tasks.map(task => (
                   <TaskIconTextWrapper>
@@ -248,11 +252,7 @@ function App() {
 
           {activeList ? (
             <>
-              <form
-                onSubmit={e =>
-                  handleOnSubmit(e, input, setInput, lists, activeList)
-                }
-              >
+              <form onSubmit={e => handleOnSubmit(e)}>
                 <TaskIconTextWrapper>
                   <StyledButton>
                     <Plus color="#3385ff" />
