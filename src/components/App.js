@@ -39,7 +39,7 @@ const InputBox = styled.input`
 `;
 
 const Text = styled.span`
-  text-decoration: ${props => (props.completed ? "line-through" : "none")};
+  text-decoration: ${(props) => (props.completed ? "line-through" : "none")};
   font-family: "Roboto", sans-serif;
   color: #262626;
   font-size: 0.9rem;
@@ -79,7 +79,7 @@ const ListTitle = styled.span`
 const Header = styled.div`
   height: 100px;
 
-  background: url(${props => props.theme});
+  background: url(${(props) => props.theme});
   background-size: cover;
   background-position: center;
 `;
@@ -117,8 +117,8 @@ function App() {
   const today = dd + "/" + mm + "/" + yyyy;
 
   function handleComplete(task) {
-    const newLists = lists.map(list => {
-      const newTasks = list.tasks.map(todo => {
+    const newLists = lists.map((list) => {
+      const newTasks = list.tasks.map((todo) => {
         if (todo.id === task.id) {
           return { ...todo, completed: !todo.completed };
         }
@@ -131,7 +131,7 @@ function App() {
 
   function handleOnSubmit(e) {
     e.preventDefault();
-    lists.map(list =>
+    lists.map((list) =>
       list.id === activeList
         ? list.tasks.push({ text: input, id: nanoid(), completed: false })
         : list.tasks
@@ -142,7 +142,7 @@ function App() {
 
   function handleEditTitle(e) {
     e.preventDefault();
-    const newList = lists.map(list =>
+    const newList = lists.map((list) =>
       list.id === activeList
         ? { ...list, name: editedInput, editMode: false }
         : { ...list }
@@ -151,7 +151,7 @@ function App() {
   }
 
   function changeEditMode() {
-    const newList = lists.map(list =>
+    const newList = lists.map((list) =>
       list.id === activeList
         ? { ...list, editMode: !list.editMode }
         : { ...list }
@@ -166,14 +166,16 @@ function App() {
 
   useEffect(() => {
     function handleDeleteList() {
-      const newList = lists.filter(list => {
+      const newList = lists.filter((list) => {
         return list.id !== activeList;
       });
-      setActiveList(null);
+      newList[newList.length - 1]
+        ? setActiveList(newList[newList.length - 1].id)
+        : setActiveList(null);
       setLists(newList);
     }
 
-    const handleDel = event => {
+    const handleDel = (event) => {
       if (event.keyCode === 46) {
         handleDeleteList();
       }
@@ -194,7 +196,7 @@ function App() {
       <GlobalStyle />
       <MainContainer>
         <Sidebar>
-          {lists.map(list => (
+          {lists.map((list) => (
             <ListIconTextWrapper>
               <StyledButton>
                 <List color="#3385ff" />
@@ -210,19 +212,19 @@ function App() {
           <Form lists={lists} setLists={setLists} placeholder="New list" />
         </Sidebar>
         <Tasks>
-          {lists.map(list => {
+          {lists.map((list) => {
             return list.id === activeList ? (
               <>
                 <Header theme={list.theme}>
                   <ImageTitleWrapper>
                     {list.editMode ? (
                       <form
-                        onSubmit={e => handleEditTitle(e)}
+                        onSubmit={(e) => handleEditTitle(e)}
                         onBlur={() => changeEditMode()}
                       >
                         <EditTitleInput
                           defaultValue={list.name}
-                          onChange={e => setEditedInput(e.target.value)}
+                          onChange={(e) => setEditedInput(e.target.value)}
                           autoFocus
                         />
                       </form>
@@ -234,7 +236,7 @@ function App() {
                     <ListTitle>{today}</ListTitle>
                   </ImageTitleWrapper>
                 </Header>
-                {list.tasks.map(task => (
+                {list.tasks.map((task) => (
                   <TaskIconTextWrapper>
                     <StyledButton onClick={() => handleComplete(task)}>
                       {task.completed ? (
@@ -252,7 +254,7 @@ function App() {
 
           {activeList ? (
             <>
-              <form onSubmit={e => handleOnSubmit(e)}>
+              <form onSubmit={(e) => handleOnSubmit(e)}>
                 <TaskIconTextWrapper>
                   <StyledButton>
                     <Plus color="#3385ff" />
@@ -260,7 +262,7 @@ function App() {
                   <InputBox
                     placeholder="Add a task"
                     value={input}
-                    onChange={e => setInput(e.target.value)}
+                    onChange={(e) => setInput(e.target.value)}
                   />
                 </TaskIconTextWrapper>
               </form>
