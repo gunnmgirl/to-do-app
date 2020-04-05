@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import nanoid from "nanoid";
+
 import Plus from "./Plus";
 import unsplash from "./Unsplash";
 
@@ -30,8 +31,8 @@ function Form({ lists, setLists, placeholder }) {
     e.preventDefault();
     const response = await unsplash.get("/photos/random", {
       params: {
-        query: "color wallpapers"
-      }
+        query: "color wallpapers",
+      },
     });
     const id = nanoid();
     input
@@ -42,22 +43,22 @@ function Form({ lists, setLists, placeholder }) {
             name: input,
             editMode: false,
             theme: response.data.urls.regular,
-            tasks: []
-          }
+            tasks: [],
+          },
         ])
       : setLists([...lists]);
     setInput("");
   }
 
   return (
-    <form onSubmit={event => handleOnSubmit(event)}>
+    <form onSubmit={(event) => handleOnSubmit(event)}>
       <ListIconTextWrapper>
         <StyledButton>
           <Plus color="#3385ff" />
         </StyledButton>
         <InputBox
           placeholder={placeholder}
-          onChange={event => setInput(event.target.value)}
+          onChange={(event) => setInput(event.target.value)}
           value={input}
         />
       </ListIconTextWrapper>

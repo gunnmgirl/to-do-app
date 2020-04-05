@@ -1,22 +1,13 @@
 import React, { useState, useEffect } from "react";
-import styled, { createGlobalStyle } from "styled-components";
 import nanoid from "nanoid";
+import styled from "styled-components";
 
 import CheckCircle from "./CheckCircle";
 import Circle from "./Circle";
 import Plus from "./Plus";
 import Form from "./Form";
 import List from "./List";
-
-const GlobalStyle = createGlobalStyle`
-* {
-  box-sizing: border-box;
-}
-  body {
-    margin: 0;
-    padding: 0;
-  }
-`;
+import GlobalStyle from "../StyledComponents/GlobalStyle";
 
 const TaskIconTextWrapper = styled.div`
   border-bottom: 0.5px solid #e6e6e6;
@@ -251,7 +242,6 @@ function App() {
               </>
             ) : null;
           })}
-
           {activeList ? (
             <>
               <form onSubmit={(e) => handleOnSubmit(e)}>
