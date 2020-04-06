@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import nanoid from "nanoid";
 import styled from "styled-components";
 
-import CheckCircle from "./CheckCircle";
-import Circle from "./Circle";
-import Plus from "./Plus";
+import CheckCircleIcon from "../Icons/CheckCircle";
+import CircleIcon from "../Icons/Circle";
+import PlusIcon from "../Icons/Plus";
 import Form from "./Form";
-import List from "./List";
+import ListIcon from "../Icons/List";
 import GlobalStyle from "../StyledComponents/GlobalStyle";
 
 const TaskIconTextWrapper = styled.div`
@@ -190,7 +190,7 @@ function App() {
           {lists.map((list) => (
             <ListIconTextWrapper>
               <StyledButton>
-                <List color="#3385ff" />
+                <ListIcon color="#3385ff" />
               </StyledButton>
               <Text
                 onClick={() => setActiveListandEditedInput(list)}
@@ -231,9 +231,9 @@ function App() {
                   <TaskIconTextWrapper>
                     <StyledButton onClick={() => handleComplete(task)}>
                       {task.completed ? (
-                        <CheckCircle color="#3385ff" />
+                        <CheckCircleIcon color="#3385ff" />
                       ) : (
-                        <Circle color="#8c8c8c" />
+                        <CircleIcon color="#8c8c8c" />
                       )}
                     </StyledButton>
                     <Text completed={task.completed}>{task.text}</Text>
@@ -247,7 +247,7 @@ function App() {
               <form onSubmit={(e) => handleOnSubmit(e)}>
                 <TaskIconTextWrapper>
                   <StyledButton>
-                    <Plus color="#3385ff" />
+                    <PlusIcon color="#3385ff" />
                   </StyledButton>
                   <InputBox
                     placeholder="Add a task"
