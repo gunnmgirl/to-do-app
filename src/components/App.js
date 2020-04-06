@@ -18,7 +18,7 @@ const TaskIconTextWrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: rgb(255, 255, 255);
+  background-color: #ffffff;
 `;
 
 const ListIconTextWrapper = styled(TaskIconTextWrapper)`
@@ -41,7 +41,7 @@ const StyledButton = styled.button`
   border: 0;
   padding-right: 14px;
   margin-left: 6px;
-  background-color: rgb(255, 255, 255);
+  background-color: #ffffff;
 `;
 
 const Sidebar = styled.div`
@@ -61,7 +61,7 @@ const Tasks = styled.div`
 
 const ListTitle = styled.span`
   font-family: "Roboto", sans-serif;
-  color: rgb(255, 255, 255);
+  color: #ffffff;
   font-size: 1rem;
   font-weight: 500;
   padding-left: 8px;
@@ -69,7 +69,6 @@ const ListTitle = styled.span`
 
 const Header = styled.div`
   height: 100px;
-
   background: url(${(props) => props.theme});
   background-size: cover;
   background-position: center;
@@ -78,7 +77,7 @@ const Header = styled.div`
 const EditTitleInput = styled.input`
   background-color: transparent;
   border: 0;
-  color: rgb(255, 255, 255);
+  color: #ffffff;
   padding-left: 8px;
   font-size: 1rem;
 `;
@@ -100,12 +99,11 @@ function App() {
   const [activeList, setActiveList] = useState(null);
   const [editedInput, setEditedInput] = useState("");
 
-  var date = new Date();
-  const dd = String(date.getDate()).padStart(2, "0");
-  const mm = String(date.getMonth() + 1).padStart(2, "0");
-  const yyyy = date.getFullYear();
-
-  const today = dd + "/" + mm + "/" + yyyy;
+  const date = new Date();
+  const day = String(date.getDate());
+  const month = String(date.getMonth() + 1);
+  const year = date.getFullYear();
+  const today = `${day}/${month}/${year}`;
 
   function handleComplete(task) {
     const newLists = lists.map((list) => {
