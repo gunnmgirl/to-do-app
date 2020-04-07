@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import nanoid from "nanoid";
 import styled from "styled-components";
 
+import unsplash from "./Unsplash";
 import CheckCircleIcon from "../Icons/CheckCircle";
 import CircleIcon from "../Icons/Circle";
 import PlusIcon from "../Icons/Plus";
 import Form from "./Form";
 import ListIcon from "../Icons/List";
 import GlobalStyle from "../StyledComponents/GlobalStyle";
+import utils from "../utils";
 
 const TaskIconTextWrapper = styled.div`
   border-bottom: 0.5px solid #e6e6e6;
@@ -92,10 +94,9 @@ const ImageTitleWrapper = styled.div`
 `;
 
 function App() {
+  const storageName = "Lists";
   const [input, setInput] = useState("");
-  const [lists, setLists] = useState(
-    JSON.parse(localStorage.getItem("Lists")) || []
-  );
+  const [lists, setLists] = useState(utils.localStorage.get(storageName, []));
   const [activeList, setActiveList] = useState(null);
   const [editedInput, setEditedInput] = useState("");
 
@@ -125,7 +126,7 @@ function App() {
         ? list.tasks.push({ text: input, id: nanoid(), completed: false })
         : list.tasks
     );
-    localStorage.setItem("Lists", JSON.stringify(lists));
+    localStorage.setItem(storageName, JSON.stringify(lists));
     setInput("");
   }
 
@@ -177,7 +178,7 @@ function App() {
   }, [activeList, lists]);
 
   useEffect(() => {
-    localStorage.setItem("Lists", JSON.stringify(lists));
+    utils.localStorage.set(storageName, lists);
   }, [lists]);
 
   return (
