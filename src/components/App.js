@@ -106,6 +106,29 @@ function App() {
   const year = date.getFullYear();
   const today = `${day}/${month}/${year}`;
 
+  async function handleOnFormSubmit(e, inputValue, setInputValue) {
+    e.preventDefault();
+    const response = await unsplash.get("/photos/random", {
+      params: {
+        query: "color wallpapers",
+      },
+    });
+    const id = nanoid();
+    inputValue
+      ? setLists([
+          ...lists,
+          {
+            id,
+            name: inputValue,
+            editMode: false,
+            theme: response.data.urls.regular,
+            tasks: [],
+          },
+        ])
+      : setLists([...lists]);
+    setInputValue("");
+  }
+
   function handleComplete(task) {
     const newLists = lists.map((list) => {
       const newTasks = list.tasks.map((todo) => {
@@ -119,15 +142,16 @@ function App() {
     setLists(newLists);
   }
 
-  function handleOnSubmit(e) {
+  function handleOnSubmit(e, inputValue, setInputValue) {
     e.preventDefault();
     lists.map((list) =>
       list.id === activeList
-        ? list.tasks.push({ text: input, id: nanoid(), completed: false })
+        ? list.tasks.push({ text: inputValue, id: nanoid(), completed: false })
         : list.tasks
     );
-    localStorage.setItem(storageName, JSON.stringify(lists));
-    setInput("");
+    utils.localStorage.set(storageName, lists);
+    setLists([...lists]);
+    setInputValue("");
   }
 
   function handleEditTitle(e) {
@@ -199,7 +223,10 @@ function App() {
               </Text>
             </ListIconTextWrapper>
           ))}
-          <Form lists={lists} setLists={setLists} placeholder="New list" />
+          <Form
+            handleOnFormSubmit={handleOnFormSubmit}
+            placeholder="New list"
+          />
         </Sidebar>
         <Tasks>
           {lists.map((list) => {
@@ -242,20 +269,10 @@ function App() {
             ) : null;
           })}
           {activeList ? (
-            <>
-              <form onSubmit={(e) => handleOnSubmit(e)}>
-                <TaskIconTextWrapper>
-                  <StyledButton>
-                    <PlusIcon color="#3385ff" />
-                  </StyledButton>
-                  <InputBox
-                    placeholder="Add a task"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                  />
-                </TaskIconTextWrapper>
-              </form>
-            </>
+            <Form
+              handleOnFormSubmit={handleOnSubmit}
+              placeholder="Add a task"
+            />
           ) : null}
         </Tasks>
       </MainContainer>

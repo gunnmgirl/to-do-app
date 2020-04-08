@@ -24,34 +24,10 @@ const StyledButton = styled.button`
   background-color: #ffffff;
 `;
 
-function Form({ lists, setLists, placeholder }) {
+function Form({ handleOnFormSubmit, placeholder = "" }) {
   const [input, setInput] = useState("");
-
-  async function handleOnSubmit(e) {
-    e.preventDefault();
-    const response = await unsplash.get("/photos/random", {
-      params: {
-        query: "color wallpapers",
-      },
-    });
-    const id = nanoid();
-    input
-      ? setLists([
-          ...lists,
-          {
-            id,
-            name: input,
-            editMode: false,
-            theme: response.data.urls.regular,
-            tasks: [],
-          },
-        ])
-      : setLists([...lists]);
-    setInput("");
-  }
-
   return (
-    <form onSubmit={(event) => handleOnSubmit(event)}>
+    <form onSubmit={(event) => handleOnFormSubmit(event, input, setInput)}>
       <ListIconTextWrapper>
         <StyledButton>
           <Plus color="#3385ff" />
