@@ -5,11 +5,11 @@ import styled from "styled-components";
 import unsplash from "./Unsplash";
 import CheckCircleIcon from "../Icons/CheckCircle";
 import CircleIcon from "../Icons/Circle";
-import PlusIcon from "../Icons/Plus";
 import Form from "./Form";
 import ListIcon from "../Icons/List";
 import GlobalStyle from "../StyledComponents/GlobalStyle";
 import utils from "../utils";
+import EditTitleInput from "./EditTitleInput";
 
 const TaskIconTextWrapper = styled.div`
   border-bottom: 0.5px solid #e6e6e6;
@@ -25,10 +25,6 @@ const TaskIconTextWrapper = styled.div`
 
 const ListIconTextWrapper = styled(TaskIconTextWrapper)`
   border-bottom: 0;
-`;
-
-const InputBox = styled.input`
-  border: 0;
 `;
 
 const Text = styled.span`
@@ -76,14 +72,6 @@ const Header = styled.div`
   background-position: center;
 `;
 
-const EditTitleInput = styled.input`
-  background-color: transparent;
-  border: 0;
-  color: #ffffff;
-  padding-left: 8px;
-  font-size: 1rem;
-`;
-
 const ImageTitleWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -95,7 +83,6 @@ const ImageTitleWrapper = styled.div`
 
 function App() {
   const storageName = "Lists";
-  const [input, setInput] = useState("");
   const [lists, setLists] = useState(utils.localStorage.get(storageName, []));
   const [activeList, setActiveList] = useState(null);
   const [editedInput, setEditedInput] = useState("");
@@ -154,11 +141,10 @@ function App() {
     setInputValue("");
   }
 
-  function handleEditTitle(e) {
-    e.preventDefault();
+  function handleEditTitle(value) {
     const newList = lists.map((list) =>
       list.id === activeList
-        ? { ...list, name: editedInput, editMode: false }
+        ? { ...list, name: value, editMode: false }
         : { ...list }
     );
     setLists(newList);
@@ -235,16 +221,10 @@ function App() {
                 <Header theme={list.theme}>
                   <ImageTitleWrapper>
                     {list.editMode ? (
-                      <form
-                        onSubmit={(e) => handleEditTitle(e)}
-                        onBlur={() => changeEditMode()}
-                      >
-                        <EditTitleInput
-                          defaultValue={list.name}
-                          onChange={(e) => setEditedInput(e.target.value)}
-                          autoFocus
-                        />
-                      </form>
+                      <EditTitleInput
+                        handleOnSubmit={handleEditTitle}
+                        defaultValue={list.name}
+                      />
                     ) : (
                       <ListTitle onClick={() => changeEditMode()}>
                         {list.name}

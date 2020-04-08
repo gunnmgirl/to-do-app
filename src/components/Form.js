@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import nanoid from "nanoid";
 
 import Plus from "../Icons/Plus";
-import unsplash from "./Unsplash";
 
 const InputBox = styled.input`
   border: 0;
