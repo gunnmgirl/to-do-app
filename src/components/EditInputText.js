@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-const EditTitle = styled.input`
+const EditInput = styled.input`
   background-color: transparent;
   border: 0;
   color: #ffffff;
@@ -9,7 +9,7 @@ const EditTitle = styled.input`
   font-size: 1rem;
 `;
 
-function EditTitleInput(props) {
+function EditInputText(props) {
   const { handleOnSubmit, defaultValue } = props;
   const [input, setInput] = useState(defaultValue);
 
@@ -18,7 +18,7 @@ function EditTitleInput(props) {
       onSubmit={() => handleOnSubmit(input)}
       onBlur={() => handleOnSubmit(input)}
     >
-      <EditTitle
+      <EditInput
         defaultValue={defaultValue}
         onChange={(e) => setInput(e.target.value)}
       />
@@ -26,4 +26,4 @@ function EditTitleInput(props) {
   );
 }
 
-export default EditTitleInput;
+export default EditInputText;

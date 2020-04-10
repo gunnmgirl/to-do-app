@@ -9,7 +9,8 @@ import Form from "./Form";
 import ListIcon from "../Icons/List";
 import GlobalStyle from "../StyledComponents/GlobalStyle";
 import utils from "../utils";
-import EditTitleInput from "./EditTitleInput";
+import EditInputText from "./EditInputText";
+import Header from "./Header";
 
 const TaskIconTextWrapper = styled.div`
   border-bottom: 0.5px solid #e6e6e6;
@@ -29,7 +30,6 @@ const ListIconTextWrapper = styled(TaskIconTextWrapper)`
 
 const Text = styled.span`
   text-decoration: ${(props) => (props.completed ? "line-through" : "none")};
-  font-family: "Roboto", sans-serif;
   color: #262626;
   font-size: 0.9rem;
   font-weight: 100;
@@ -55,30 +55,6 @@ const MainContainer = styled.div`
 const Tasks = styled.div`
   width: 80%;
   padding-top: 10px;
-`;
-
-const ListTitle = styled.span`
-  font-family: "Roboto", sans-serif;
-  color: #ffffff;
-  font-size: 1rem;
-  font-weight: 500;
-  padding-left: 8px;
-`;
-
-const Header = styled.div`
-  height: 100px;
-  background: url(${(props) => props.theme});
-  background-size: cover;
-  background-position: center;
-`;
-
-const ImageTitleWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  justify-content: center;
-  height: 100px;
-  background-color: rgba(0, 0, 0, 0.1);
 `;
 
 function App() {
@@ -108,7 +84,7 @@ function App() {
             id,
             name: inputValue,
             editMode: false,
-            theme: response.data.urls.regular,
+            image: response.data.urls.regular,
             tasks: [],
           },
         ])
@@ -162,6 +138,12 @@ function App() {
   function setActiveListandEditedInput(list) {
     setActiveList(list.id);
     setEditedInput(list.name);
+  }
+
+  function renderPrimary(name) {
+    return (
+      <EditInputText handleOnSubmit={handleEditTitle} defaultValue={name} />
+    );
   }
 
   useEffect(() => {
@@ -218,21 +200,11 @@ function App() {
           {lists.map((list) => {
             return list.id === activeList ? (
               <>
-                <Header theme={list.theme}>
-                  <ImageTitleWrapper>
-                    {list.editMode ? (
-                      <EditTitleInput
-                        handleOnSubmit={handleEditTitle}
-                        defaultValue={list.name}
-                      />
-                    ) : (
-                      <ListTitle onClick={() => changeEditMode()}>
-                        {list.name}
-                      </ListTitle>
-                    )}
-                    <ListTitle>{today}</ListTitle>
-                  </ImageTitleWrapper>
-                </Header>
+                <Header
+                  primary={() => renderPrimary(list.name)}
+                  image={list.image}
+                  secondary={today}
+                />
                 {list.tasks.map((task) => (
                   <TaskIconTextWrapper>
                     <StyledButton onClick={() => handleComplete(task)}>
