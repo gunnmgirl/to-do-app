@@ -68,7 +68,6 @@ function App() {
   const storageName = "Lists";
   const [lists, setLists] = useState(utils.localStorage.get(storageName, []));
   const [activeList, setActiveList] = useState(null);
-  const [editedInput, setEditedInput] = useState("");
   const [editMode, setEditMode] = useState(false);
 
   const date = new Date();
@@ -135,7 +134,6 @@ function App() {
 
   function setActiveListandEditedInput(list) {
     setActiveList(list.id);
-    setEditedInput(list.name);
   }
 
   function renderPrimary(name) {
