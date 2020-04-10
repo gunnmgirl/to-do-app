@@ -21,6 +21,7 @@ function EditInputText(props) {
       <EditInput
         defaultValue={defaultValue}
         onChange={(e) => setInput(e.target.value)}
+        autoFocus
       />
     </form>
   );

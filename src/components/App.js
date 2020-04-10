@@ -12,6 +12,13 @@ import utils from "../utils";
 import EditInputText from "./EditInputText";
 import Header from "./Header";
 
+const HeaderText = styled.span`
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 500;
+  padding-left: 8px;
+`;
+
 const TaskIconTextWrapper = styled.div`
   border-bottom: 0.5px solid #e6e6e6;
   padding-top: 4px;
@@ -62,6 +69,7 @@ function App() {
   const [lists, setLists] = useState(utils.localStorage.get(storageName, []));
   const [activeList, setActiveList] = useState(null);
   const [editedInput, setEditedInput] = useState("");
+  const [editMode, setEditMode] = useState(false);
 
   const date = new Date();
   const day = String(date.getDate());
@@ -83,13 +91,13 @@ function App() {
           {
             id,
             name: inputValue,
-            editMode: false,
             image: response.data.urls.regular,
             tasks: [],
           },
         ])
       : setLists([...lists]);
     setInputValue("");
+    setEditMode(false);
   }
 
   function handleComplete(task) {
@@ -119,20 +127,10 @@ function App() {
 
   function handleEditTitle(value) {
     const newList = lists.map((list) =>
-      list.id === activeList
-        ? { ...list, name: value, editMode: false }
-        : { ...list }
+      list.id === activeList ? { ...list, name: value } : { ...list }
     );
     setLists(newList);
-  }
-
-  function changeEditMode() {
-    const newList = lists.map((list) =>
-      list.id === activeList
-        ? { ...list, editMode: !list.editMode }
-        : { ...list }
-    );
-    setLists(newList);
+    setEditMode(false);
   }
 
   function setActiveListandEditedInput(list) {
@@ -143,6 +141,12 @@ function App() {
   function renderPrimary(name) {
     return (
       <EditInputText handleOnSubmit={handleEditTitle} defaultValue={name} />
+    );
+  }
+
+  function renderTitle(name) {
+    return (
+      <HeaderText onClick={() => setEditMode(!editMode)}>{name}</HeaderText>
     );
   }
 
@@ -172,7 +176,7 @@ function App() {
   useEffect(() => {
     utils.localStorage.set(storageName, lists);
   }, [lists]);
-
+  console.log(editMode);
   return (
     <>
       <GlobalStyle />
@@ -200,11 +204,25 @@ function App() {
           {lists.map((list) => {
             return list.id === activeList ? (
               <>
-                <Header
+                {/*<Header
                   primary={() => renderPrimary(list.name)}
                   image={list.image}
                   secondary={today}
-                />
+                />*/}
+
+                {editMode ? (
+                  <Header
+                    primary={() => renderPrimary(list.name)}
+                    image={list.image}
+                    secondary={today}
+                  />
+                ) : (
+                  <Header
+                    primary={() => renderTitle(list.name)}
+                    image={list.image}
+                    secondary={today}
+                  />
+                )}
                 {list.tasks.map((task) => (
                   <TaskIconTextWrapper>
                     <StyledButton onClick={() => handleComplete(task)}>
