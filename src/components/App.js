@@ -11,6 +11,7 @@ import GlobalStyle from "../StyledComponents/GlobalStyle";
 import utils from "../utils";
 import EditInputText from "./EditInputText";
 import Header from "./Header";
+import hooks from "../hooks";
 
 const HeaderText = styled.span`
   color: #ffffff;
@@ -148,33 +149,21 @@ function App() {
     );
   }
 
-  useEffect(() => {
-    function handleDeleteList() {
-      const newList = lists.filter((list) => {
-        return list.id !== activeList;
-      });
-      newList[newList.length - 1]
-        ? setActiveList(newList[newList.length - 1].id)
-        : setActiveList(null);
-      setLists(newList);
-    }
+  function handleDeleteList() {
+    const newList = lists.filter((list) => {
+      return list.id !== activeList;
+    });
+    newList[newList.length - 1]
+      ? setActiveList(newList[newList.length - 1].id)
+      : setActiveList(null);
+    setLists(newList);
+  }
 
-    const handleDel = (event) => {
-      if (event.keyCode === 46) {
-        handleDeleteList();
-      }
-    };
-    window.addEventListener("keydown", handleDel);
-
-    return () => {
-      window.removeEventListener("keydown", handleDel);
-    };
-  }, [activeList, lists]);
+  hooks.useKeyPress("Delete", () => handleDeleteList());
 
   useEffect(() => {
     utils.localStorage.set(storageName, lists);
   }, [lists]);
-  console.log(editMode);
   return (
     <>
       <GlobalStyle />
