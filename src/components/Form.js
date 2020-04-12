@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import Plus from "../Icons/Plus";
+import Plus from "../icons/Plus";
 
 const InputBox = styled.input`
   border: 0;

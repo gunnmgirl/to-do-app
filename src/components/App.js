@@ -3,51 +3,22 @@ import nanoid from "nanoid";
 import styled from "styled-components";
 
 import unsplash from "./Unsplash";
-import CheckCircleIcon from "../Icons/CheckCircle";
-import CircleIcon from "../Icons/Circle";
+import CheckCircleIcon from "../icons/CheckCircle";
+import CircleIcon from "../icons/Circle";
 import Form from "./Form";
-import ListIcon from "../Icons/List";
+import ListIcon from "../icons/List";
 import GlobalStyle from "../StyledComponents/GlobalStyle";
 import utils from "../utils";
 import EditInputText from "./EditInputText";
 import Header from "./Header";
 import hooks from "../hooks";
+import ListItem from "./ListItem";
 
 const HeaderText = styled.span`
   color: #ffffff;
   font-size: 1rem;
   font-weight: 500;
   padding-left: 8px;
-`;
-
-const TaskIconTextWrapper = styled.div`
-  border-bottom: 0.5px solid #e6e6e6;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  margin-bottom: 10px;
-  margin-top: 10px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  background-color: #ffffff;
-`;
-
-const ListIconTextWrapper = styled(TaskIconTextWrapper)`
-  border-bottom: 0;
-`;
-
-const Text = styled.span`
-  text-decoration: ${(props) => (props.completed ? "line-through" : "none")};
-  color: #262626;
-  font-size: 0.9rem;
-  font-weight: 100;
-`;
-
-const StyledButton = styled.button`
-  border: 0;
-  padding-right: 14px;
-  margin-left: 6px;
-  background-color: #ffffff;
 `;
 
 const Sidebar = styled.div`
@@ -115,6 +86,7 @@ function App() {
 
   function handleOnSubmit(e, inputValue, setInputValue) {
     e.preventDefault();
+    if (!inputValue) return null;
     lists.map((list) =>
       list.id === activeList
         ? list.tasks.push({ text: inputValue, id: nanoid(), completed: false })
@@ -164,23 +136,18 @@ function App() {
   useEffect(() => {
     utils.localStorage.set(storageName, lists);
   }, [lists]);
+
   return (
     <>
       <GlobalStyle />
       <MainContainer>
         <Sidebar>
           {lists.map((list) => (
-            <ListIconTextWrapper>
-              <StyledButton>
-                <ListIcon color="#3385ff" />
-              </StyledButton>
-              <Text
-                onClick={() => setActiveListandEditedInput(list)}
-                key={list.id}
-              >
-                {list.name}
-              </Text>
-            </ListIconTextWrapper>
+            <ListItem
+              icon={<ListIcon color="#3385ff" />}
+              text={list.name}
+              onTextClick={() => setActiveListandEditedInput(list)}
+            />
           ))}
           <Form
             handleOnFormSubmit={handleOnFormSubmit}
@@ -191,12 +158,6 @@ function App() {
           {lists.map((list) => {
             return list.id === activeList ? (
               <>
-                {/*<Header
-                  primary={() => renderPrimary(list.name)}
-                  image={list.image}
-                  secondary={today}
-                />*/}
-
                 {editMode ? (
                   <Header
                     primary={() => renderPrimary(list.name)}
@@ -210,18 +171,22 @@ function App() {
                     secondary={today}
                   />
                 )}
-                {list.tasks.map((task) => (
-                  <TaskIconTextWrapper>
-                    <StyledButton onClick={() => handleComplete(task)}>
-                      {task.completed ? (
-                        <CheckCircleIcon color="#3385ff" />
-                      ) : (
-                        <CircleIcon color="#8c8c8c" />
-                      )}
-                    </StyledButton>
-                    <Text completed={task.completed}>{task.text}</Text>
-                  </TaskIconTextWrapper>
-                ))}
+                {list.tasks.map((task) =>
+                  task.completed ? (
+                    <ListItem
+                      icon={<CheckCircleIcon color="#3385ff" />}
+                      text={task.text}
+                      onIconClick={() => handleComplete(task)}
+                      textDecoration="line-through"
+                    />
+                  ) : (
+                    <ListItem
+                      icon={<CircleIcon color="#8c8c8c" />}
+                      text={task.text}
+                      onIconClick={() => handleComplete(task)}
+                    />
+                  )
+                )}
               </>
             ) : null;
           })}

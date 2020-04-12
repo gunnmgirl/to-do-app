@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const List = props => {
+const List = (props) => {
   const { color, size, ...otherProps } = props;
   return (
     <svg
@@ -28,12 +28,12 @@ const List = props => {
 
 List.propTypes = {
   color: PropTypes.string,
-  size: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+  size: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 List.defaultProps = {
   color: "currentColor",
-  size: "24"
+  size: "24",
 };
 
 export default List;
