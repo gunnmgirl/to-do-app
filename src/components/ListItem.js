@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
+  border-bottom: ${(props) => props.border};
   padding-top: 4px;
   padding-bottom: 4px;
   margin-bottom: 10px;
@@ -33,9 +34,10 @@ function ListItem(props) {
     onTextClick = null,
     onIconClick = null,
     textDecoration = "none",
+    boxBorder = "0.6px solid #d9d9d9",
   } = props;
   return (
-    <Wrapper>
+    <Wrapper border={boxBorder}>
       <StyledButton onClick={onIconClick}>{icon}</StyledButton>
       <Text decoration={textDecoration} onClick={onTextClick}>
         {text}

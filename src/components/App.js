@@ -21,23 +21,20 @@ const HeaderText = styled.span`
   padding-left: 8px;
 `;
 
-const Sidebar = styled.div`
-  width: 20%;
-`;
+const Lists = styled.div``;
 
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: row;
+const Container = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 4fr;
   min-height: 100vh;
 `;
 
 const Tasks = styled.div`
-  width: 80%;
   padding-top: 10px;
 `;
 
 function App() {
-  const storageName = "Lists";
+  const storageName = "lists";
   const [lists, setLists] = useState(utils.localStorage.get(storageName, []));
   const [activeList, setActiveList] = useState(null);
   const [editMode, setEditMode] = useState(false);
@@ -69,6 +66,7 @@ function App() {
       : setLists([...lists]);
     setInputValue("");
     setEditMode(false);
+    setActiveList(id);
   }
 
   function handleComplete(task) {
@@ -140,20 +138,21 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <MainContainer>
-        <Sidebar>
+      <Container>
+        <Lists>
           {lists.map((list) => (
             <ListItem
               icon={<ListIcon color="#3385ff" />}
               text={list.name}
               onTextClick={() => setActiveListandEditedInput(list)}
+              boxBorder="0"
             />
           ))}
           <Form
             handleOnFormSubmit={handleOnFormSubmit}
             placeholder="New list"
           />
-        </Sidebar>
+        </Lists>
         <Tasks>
           {lists.map((list) => {
             return list.id === activeList ? (
@@ -197,7 +196,7 @@ function App() {
             />
           ) : null}
         </Tasks>
-      </MainContainer>
+      </Container>
     </>
   );
 }
