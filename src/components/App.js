@@ -49,7 +49,7 @@ function App() {
 
   async function handleOnFormSubmit(e, inputValue, setInputValue) {
     e.preventDefault();
-    const response = getRandomImage();
+    const response = await getRandomImage();
     const id = nanoid();
     inputValue
       ? setLists([
@@ -140,6 +140,7 @@ function App() {
         <Lists>
           {lists.map((list) => (
             <ListItem
+              key={list.id}
               icon={<ListIcon color="#3385ff" />}
               text={list.name}
               onTextClick={() => setActiveListandEditedInput(list)}
@@ -157,6 +158,7 @@ function App() {
               <>
                 {editMode ? (
                   <Header
+                    key={list.id}
                     primary={() => renderPrimary(list.name)}
                     image={list.image}
                     secondary={today}
