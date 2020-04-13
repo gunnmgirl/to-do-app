@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import nanoid from "nanoid";
 import styled from "styled-components";
 
-import unsplash from "./Unsplash";
+import getRandomImage from "../api/unsplash";
 import CheckCircleIcon from "../icons/CheckCircle";
 import CircleIcon from "../icons/Circle";
 import Form from "./Form";
@@ -25,8 +25,10 @@ const Lists = styled.div``;
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 1fr 4fr;
-  min-height: 100vh;
+  grid-template-rows: auto auto;
+  @media (min-width: 576px) {
+    grid-template-columns: 1fr 4fr;
+  }
 `;
 
 const Tasks = styled.div`
@@ -47,11 +49,7 @@ function App() {
 
   async function handleOnFormSubmit(e, inputValue, setInputValue) {
     e.preventDefault();
-    const response = await unsplash.get("/photos/random", {
-      params: {
-        query: "color wallpapers",
-      },
-    });
+    const response = getRandomImage();
     const id = nanoid();
     inputValue
       ? setLists([
