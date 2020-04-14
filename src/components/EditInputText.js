@@ -5,7 +5,7 @@ const EditInput = styled.input`
   background-color: transparent;
   border: 0;
   color: #ffffff;
-  padding-left: 8px;
+  padding-left: 0.5rem;
   font-size: 1rem;
 `;
 

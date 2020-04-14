@@ -3,10 +3,10 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   border-bottom: ${(props) => props.border};
-  padding-top: 4px;
-  padding-bottom: 4px;
-  margin-bottom: 10px;
-  margin-top: 10px;
+  padding-top: 0.2rem;
+  padding-bottom: 0.2rem;
+  margin-bottom: 0.6rem;
+  margin-top: 0.6rem;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -15,8 +15,8 @@ const Wrapper = styled.div`
 
 const StyledButton = styled.button`
   border: 0;
-  padding-right: 14px;
-  margin-left: 6px;
+  padding-right: 0.9rem;
+  margin-left: 0.4rem;
   background-color: #ffffff;
 `;
 

@@ -7,7 +7,7 @@ import CheckCircleIcon from "../icons/CheckCircle";
 import CircleIcon from "../icons/Circle";
 import Form from "./Form";
 import ListIcon from "../icons/List";
-import GlobalStyle from "../StyledComponents/GlobalStyle";
+import GlobalStyle from "../style/GlobalStyle";
 import utils from "../utils";
 import EditInputText from "./EditInputText";
 import Header from "./Header";
@@ -18,7 +18,7 @@ const HeaderText = styled.span`
   color: #ffffff;
   font-size: 1rem;
   font-weight: 500;
-  padding-left: 8px;
+  padding-left: 0.5rem;
 `;
 
 const Lists = styled.div``;
@@ -32,7 +32,7 @@ const Container = styled.div`
 `;
 
 const Tasks = styled.div`
-  padding-top: 10px;
+  padding-top: 0.6rem;
 `;
 
 function App() {

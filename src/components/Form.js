@@ -9,16 +9,16 @@ const InputBox = styled.input`
 
 const ListIconTextWrapper = styled.div`
   border-bottom: 0;
-  padding-bottom: 10px;
-  padding-top: 10px;
+  padding-bottom: 0.6rem;
+  padding-top: 0.6rem;
   display: flex;
   align-items: center;
 `;
 
 const StyledButton = styled.button`
   border: 0;
-  padding-right: 14px;
-  margin-left: 6px;
+  padding-right: 0.9rem;
+  margin-left: 0.4rem;
   background-color: #ffffff;
 `;
 
