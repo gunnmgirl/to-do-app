@@ -50,6 +50,7 @@ function App() {
   const lel =
     utils.localStorage.get(storageName, INITIAL_VALUE.id)[0].id ||
     utils.localStorage.get(storageName, INITIAL_VALUE.id);
+
   const [activeList, setActiveList] = useState(lel);
   const [editMode, setEditMode] = useState(false);
 
@@ -135,6 +136,7 @@ function App() {
   }
 
   function handleDeleteList() {
+    if (activeList === lists[0].id) return null;
     const newList = lists.filter((list) => {
       return list.id !== activeList;
     });
