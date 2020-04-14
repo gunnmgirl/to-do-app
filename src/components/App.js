@@ -37,8 +37,20 @@ const Tasks = styled.div`
 
 function App() {
   const storageName = "lists";
-  const [lists, setLists] = useState(utils.localStorage.get(storageName, []));
-  const [activeList, setActiveList] = useState(null);
+  const INITIAL_VALUE = {
+    id: nanoid(),
+    name: "My Day",
+    image:
+      "https://images.unsplash.com/photo-1472289065668-ce650ac443d2?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjEyNTIyNX0",
+    tasks: [],
+  };
+  const [lists, setLists] = useState(
+    utils.localStorage.get(storageName, [INITIAL_VALUE])
+  );
+  const lel =
+    utils.localStorage.get(storageName, INITIAL_VALUE.id)[0].id ||
+    utils.localStorage.get(storageName, INITIAL_VALUE.id);
+  const [activeList, setActiveList] = useState(lel);
   const [editMode, setEditMode] = useState(false);
 
   const date = new Date();
@@ -109,7 +121,16 @@ function App() {
 
   function renderTitle(name) {
     return (
-      <HeaderText onClick={() => setEditMode(!editMode)}>{name}</HeaderText>
+      <HeaderText
+        onClick={() => {
+          if (name === "My Day") setEditMode(false);
+          else {
+            setEditMode(!editMode);
+          }
+        }}
+      >
+        {name}
+      </HeaderText>
     );
   }
 
