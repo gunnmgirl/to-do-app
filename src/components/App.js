@@ -101,10 +101,6 @@ function App() {
     setEditMode(false);
   }
 
-  function setActiveListandEditedInput(list) {
-    setActiveList(list.id);
-  }
-
   function renderPrimary(name) {
     return (
       <EditInputText handleOnSubmit={handleEditTitle} defaultValue={name} />
@@ -143,7 +139,7 @@ function App() {
               key={list.id}
               icon={<ListIcon color="#3385ff" />}
               text={list.name}
-              onTextClick={() => setActiveListandEditedInput(list)}
+              onTextClick={() => setActiveList(list.id)}
               boxBorder="0"
             />
           ))}
@@ -155,7 +151,7 @@ function App() {
         <Tasks>
           {lists.map((list) => {
             return list.id === activeList ? (
-              <>
+              <div key={list.id}>
                 {editMode ? (
                   <Header
                     key={list.id}
@@ -173,6 +169,7 @@ function App() {
                 {list.tasks.map((task) =>
                   task.completed ? (
                     <ListItem
+                      key={task.id}
                       icon={<CheckCircleIcon color="#3385ff" />}
                       text={task.text}
                       onIconClick={() => handleComplete(task)}
@@ -180,13 +177,14 @@ function App() {
                     />
                   ) : (
                     <ListItem
+                      key={task.id}
                       icon={<CircleIcon color="#8c8c8c" />}
                       text={task.text}
                       onIconClick={() => handleComplete(task)}
                     />
                   )
                 )}
-              </>
+              </div>
             ) : null;
           })}
           {activeList ? (
