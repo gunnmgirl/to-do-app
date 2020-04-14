@@ -5,6 +5,11 @@ import Plus from "../icons/Plus";
 
 const InputBox = styled.input`
   border: 0;
+  color: ${(props) => props.theme.primary};
+  background-color: ${(props) => props.theme.backgroundPrimary};
+  ::placeholder {
+    color: ${(props) => props.theme.primary};
+  }
 `;
 
 const ListIconTextWrapper = styled.div`
@@ -19,16 +24,16 @@ const StyledButton = styled.button`
   border: 0;
   padding-right: 0.9rem;
   margin-left: 0.4rem;
-  background-color: #ffffff;
+  background-color: ${(props) => props.theme.backgroundPrimary};
 `;
 
-function Form({ handleOnFormSubmit, placeholder = "" }) {
+function Form({ handleOnFormSubmit, placeholder = "", theme }) {
   const [input, setInput] = useState("");
   return (
     <form onSubmit={(event) => handleOnFormSubmit(event, input, setInput)}>
       <ListIconTextWrapper>
         <StyledButton>
-          <Plus color="#3385ff" />
+          <Plus color={theme.primary} />
         </StyledButton>
         <InputBox
           placeholder={placeholder}

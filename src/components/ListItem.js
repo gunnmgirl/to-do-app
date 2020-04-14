@@ -10,19 +10,18 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  background-color: #ffffff;
 `;
 
 const StyledButton = styled.button`
   border: 0;
   padding-right: 0.9rem;
   margin-left: 0.4rem;
-  background-color: #ffffff;
+  background-color: ${(props) => props.theme.backgroundPrimary};
 `;
 
 const Text = styled.span`
   text-decoration: ${(props) => props.decoration};
-  color: #262626;
+  color: ${(props) => props.theme.primary};
   font-size: 0.9rem;
   font-weight: 100;
 `;
@@ -34,7 +33,7 @@ function ListItem(props) {
     onTextClick = null,
     onIconClick = null,
     textDecoration = "none",
-    boxBorder = "0.6px solid #d9d9d9",
+    boxBorder = "0.03rem solid rgba(191, 191, 191, 0.5)",
   } = props;
   return (
     <Wrapper border={boxBorder}>
