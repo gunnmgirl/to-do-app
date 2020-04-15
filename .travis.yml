@@ -9,6 +9,6 @@ script:
 deploy:
   provider: surge
   domain: myreminders.surge.sh
-  project: ./build/
+  local_dir: build
 on:
   branch: master
