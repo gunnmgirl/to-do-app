@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import nanoid from "nanoid";
-import styled, { useTheme } from "styled-components";
+import styled, { ThemeProvider } from "styled-components";
 
 import getRandomImage from "../api/unsplash";
+import themes from "../themes";
 import CheckCircleIcon from "../icons/CheckCircle";
 import CircleIcon from "../icons/Circle";
 import Form from "./Form";
@@ -27,7 +28,6 @@ const Lists = styled.div`
 `;
 
 const Container = styled.div`
-  background-color: ${(props) => props.theme.backgroundPrimary};
   display: grid;
   grid-template-rows: auto auto;
   @media (min-width: 576px) {
@@ -39,9 +39,22 @@ const Tasks = styled.div`
   padding-top: 0.6rem;
 `;
 
+const ListIconWrapper = styled(ListIcon)`
+  color: ${(props) => props.theme.primary};
+`;
+
+const CheckCircleIconWrapper = styled(CheckCircleIcon)`
+  color: ${(props) => props.theme.primary};
+`;
+
+const CircleIconWrapper = styled(CircleIcon)`
+  color: ${(props) => props.theme.primary};
+`;
+
 function App() {
-  const theme = useTheme();
   const storageName = "lists";
+  const dark = hooks.usePreferredTheme();
+  const theme = dark ? themes.dark : themes.light;
   const INITIAL_VALUE = {
     id: nanoid(),
     name: "My Day",
@@ -51,11 +64,11 @@ function App() {
   const [lists, setLists] = useState(
     utils.localStorage.get(storageName, [INITIAL_VALUE])
   );
-  const lel =
+  const initialActiveList =
     utils.localStorage.get(storageName, INITIAL_VALUE.id)[0].id ||
     utils.localStorage.get(storageName, INITIAL_VALUE.id);
 
-  const [activeList, setActiveList] = useState(lel);
+  const [activeList, setActiveList] = useState(initialActiveList);
   const [editMode, setEditMode] = useState(false);
 
   const date = new Date();
@@ -157,22 +170,20 @@ function App() {
   }, [lists]);
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Container theme={theme}>
+      <Container>
         <Lists>
           {lists.map((list) => (
             <ListItem
-              theme={theme}
               key={list.id}
-              icon={<ListIcon color={theme.primary} />}
+              icon={<ListIconWrapper />}
               text={list.name}
               onTextClick={() => setActiveList(list.id)}
               boxBorder="0"
             />
           ))}
           <Form
-            theme={theme}
             handleOnFormSubmit={handleOnFormSubmit}
             placeholder="New list"
           />
@@ -199,7 +210,7 @@ function App() {
                   task.completed ? (
                     <ListItem
                       key={task.id}
-                      icon={<CheckCircleIcon color={theme.primary} />}
+                      icon={<CheckCircleIconWrapper />}
                       text={task.text}
                       onIconClick={() => handleComplete(task)}
                       textDecoration="line-through"
@@ -207,7 +218,7 @@ function App() {
                   ) : (
                     <ListItem
                       key={task.id}
-                      icon={<CircleIcon color={theme.primary} />}
+                      icon={<CircleIconWrapper />}
                       text={task.text}
                       onIconClick={() => handleComplete(task)}
                     />
@@ -218,14 +229,13 @@ function App() {
           })}
           {activeList ? (
             <Form
-              theme={theme}
               handleOnFormSubmit={handleOnSubmit}
               placeholder="Add a task"
             />
           ) : null}
         </Tasks>
       </Container>
-    </>
+    </ThemeProvider>
   );
 }
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import Plus from "../icons/Plus";
+import PlusIcon from "../icons/Plus";
 
 const InputBox = styled.input`
   border: 0;
@@ -27,13 +27,17 @@ const StyledButton = styled.button`
   background-color: ${(props) => props.theme.backgroundPrimary};
 `;
 
-function Form({ handleOnFormSubmit, placeholder = "", theme }) {
+const PlusIconWrapper = styled(PlusIcon)`
+  color: ${(props) => props.theme.primary};
+`;
+
+function Form({ handleOnFormSubmit, placeholder = "" }) {
   const [input, setInput] = useState("");
   return (
     <form onSubmit={(event) => handleOnFormSubmit(event, input, setInput)}>
       <ListIconTextWrapper>
         <StyledButton>
-          <Plus color={theme.primary} />
+          <PlusIconWrapper />
         </StyledButton>
         <InputBox
           placeholder={placeholder}
