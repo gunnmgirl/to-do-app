@@ -8,7 +8,6 @@ script:
   - npm run build
 deploy:
   provider: surge
-  skip_cleanup: true
   domain: myreminders.surge.sh
   project: ./build/
 on:
