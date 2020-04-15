@@ -5,10 +5,12 @@ cache:
   directories:
     - node_modules
 script:
-  - yarn build
+  - npm test
+  - npm run build
 deploy:
   provider: surge
+  skip_cleanup: true
   domain: myreminders.surge.sh
-  local_dir: build
+  project: ./build/
 on:
   branch: master

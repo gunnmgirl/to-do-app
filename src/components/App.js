@@ -4,7 +4,7 @@ import styled, { ThemeProvider } from "styled-components";
 
 import getRandomImage from "../api/unsplash";
 import themes from "../themes";
-//import CheckCircleIcon from "../icons/CheckCircle";
+import CheckCircleIcon from "../icons/CheckCircle";
 import CircleIcon from "../icons/Circle";
 import Form from "./Form";
 import ListIcon from "../icons/List";
@@ -43,9 +43,9 @@ const ListIconWrapper = styled(ListIcon)`
   color: ${(props) => props.theme.primary};
 `;
 
-/*const CheckCircleIconWrapper = styled(CheckCircleIcon)`
+const CheckCircleIconWrapper = styled(CheckCircleIcon)`
   color: ${(props) => props.theme.primary};
-`;*/
+`;
 
 const CircleIconWrapper = styled(CircleIcon)`
   color: ${(props) => props.theme.primary};
@@ -210,7 +210,7 @@ function App() {
                   task.completed ? (
                     <ListItem
                       key={task.id}
-                      icon={<CircleIconWrapper />}
+                      icon={<CheckCircleIconWrapper />}
                       text={task.text}
                       onIconClick={() => handleComplete(task)}
                       textDecoration="line-through"
