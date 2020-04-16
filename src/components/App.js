@@ -24,7 +24,9 @@ const HeaderText = styled.span`
 `;
 
 const Lists = styled.div`
-  min-height: 100vh;
+  @media (min-width: 576px) {
+    min-height: 100vh;
+  }
 `;
 
 const Container = styled.div`
