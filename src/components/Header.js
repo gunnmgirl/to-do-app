@@ -18,7 +18,7 @@ const HeaderContent = styled.div`
 `;
 
 const HeaderText = styled.span`
-  color: #ffffff;
+  color: #fff;
   font-size: 1rem;
   font-weight: 500;
   padding-left: 0.5rem;

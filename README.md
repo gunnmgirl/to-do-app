@@ -1,6 +1,6 @@
 # To Do App
 
-Simple app where you can create to do lists and add tasks to a specific list.
+Simple app where you can create lists and add tasks to a specific list.
 
 ![Screenshot](docs/images/screenshot.png)
 

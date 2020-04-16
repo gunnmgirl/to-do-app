@@ -17,7 +17,7 @@ import ListItem from "./ListItem";
 import MyDayImage from "../images/MyDayImage.png";
 
 const HeaderText = styled.span`
-  color: #ffffff;
+  color: #fff;
   font-size: 1rem;
   font-weight: 500;
   padding-left: 0.5rem;
