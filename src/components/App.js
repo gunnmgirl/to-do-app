@@ -6,6 +6,7 @@ import getRandomImage from "../api/unsplash";
 import themes from "../themes";
 import CheckCircleIcon from "../icons/CheckCircle";
 import CircleIcon from "../icons/Circle";
+import XIcon from "../icons/X";
 import Form from "./Form";
 import ListIcon from "../icons/List";
 import GlobalStyle from "../style/GlobalStyle";
@@ -15,6 +16,11 @@ import Header from "./Header";
 import hooks from "../hooks";
 import ListItem from "./ListItem";
 import MyDayImage from "../images/MyDayImage.png";
+
+const Task = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 const HeaderText = styled.span`
   color: #fff;
@@ -51,6 +57,11 @@ const CheckCircleIconWrapper = styled(CheckCircleIcon)`
 
 const CircleIconWrapper = styled(CircleIcon)`
   color: ${(props) => props.theme.primary};
+`;
+
+const XIconWrapper = styled(XIcon)`
+  color: ${(props) => props.theme.primary};
+  align-self: center;
 `;
 
 function App() {
@@ -171,6 +182,14 @@ function App() {
     utils.localStorage.set(storageName, lists);
   }, [lists]);
 
+  function handleDeleteTask(list, id) {
+    const newTasks = list.tasks.filter((task) => task.id !== id);
+    const newLists = lists.map((list) =>
+      list.id === activeList ? { ...list, tasks: newTasks } : { ...list }
+    );
+    setLists(newLists);
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
@@ -210,20 +229,30 @@ function App() {
                 )}
                 {list.tasks.map((task) =>
                   task.completed ? (
-                    <ListItem
-                      key={task.id}
-                      icon={<CheckCircleIconWrapper />}
-                      text={task.text}
-                      onIconClick={() => handleComplete(task)}
-                      textDecoration="line-through"
-                    />
+                    <Task>
+                      <ListItem
+                        key={task.id}
+                        icon={<CheckCircleIconWrapper />}
+                        text={task.text}
+                        onIconClick={() => handleComplete(task)}
+                        textDecoration="line-through"
+                      />
+                      <XIconWrapper
+                        onClick={() => handleDeleteTask(list, task.id)}
+                      />
+                    </Task>
                   ) : (
-                    <ListItem
-                      key={task.id}
-                      icon={<CircleIconWrapper />}
-                      text={task.text}
-                      onIconClick={() => handleComplete(task)}
-                    />
+                    <Task>
+                      <ListItem
+                        key={task.id}
+                        icon={<CircleIconWrapper />}
+                        text={task.text}
+                        onIconClick={() => handleComplete(task)}
+                      />
+                      <XIconWrapper
+                        onClick={() => handleDeleteTask(list, task.id)}
+                      />
+                    </Task>
                   )
                 )}
               </div>
