@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Popover } from "@malcodeman/react-popover";
 
 const Wrapper = styled.div`
   border-bottom: ${(props) => props.border};
@@ -27,8 +28,36 @@ const Text = styled.span`
   font-weight: 100;
 `;
 
+const StyledPopover = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-radius: 3px;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  margin: 0 1rem;
+`;
+
+const Menu = styled.ul`
+  padding: 0.25rem 0.25rem;
+  margin: 0;
+`;
+
+const MenuItem = styled.li`
+  list-style: none;
+  padding: 0.25rem 1rem;
+  cursor: pointer;
+  border-radius: 3px;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+`;
+
 function ListItem(props) {
+  const [isOpen, setIsOpen] = React.useState(false);
   const {
+    listId,
+    myDayId,
+    deleteList,
     icon,
     text,
     onTextClick = null,
@@ -36,13 +65,44 @@ function ListItem(props) {
     textDecoration = "none",
     boxBorder = "0.03rem solid rgba(191, 191, 191, 0.5)",
   } = props;
+
+  function content() {
+    return (
+      <StyledPopover>
+        <Menu>
+          <MenuItem
+            onClick={() => {
+              deleteList(listId);
+            }}
+          >
+            Delete
+          </MenuItem>
+        </Menu>
+      </StyledPopover>
+    );
+  }
+
   return (
-    <Wrapper border={boxBorder}>
-      <StyledButton onClick={onIconClick}>{icon}</StyledButton>
-      <Text decoration={textDecoration} onClick={onTextClick}>
-        {text}
-      </Text>
-    </Wrapper>
+    <Popover
+      isOpen={isOpen}
+      content={content}
+      onClickOutside={() => setIsOpen(false)}
+    >
+      <Wrapper
+        border={boxBorder}
+        onContextMenu={(event) => {
+          if (listId === myDayId) return null;
+          event.preventDefault();
+          setIsOpen(!isOpen);
+        }}
+        onClick={() => setIsOpen(false)}
+      >
+        <StyledButton onClick={onIconClick}>{icon}</StyledButton>
+        <Text decoration={textDecoration} onClick={onTextClick}>
+          {text}
+        </Text>
+      </Wrapper>
+    </Popover>
   );
 }
 

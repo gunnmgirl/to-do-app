@@ -165,14 +165,12 @@ function App() {
     );
   }
 
-  function handleDeleteList() {
-    if (activeList === lists[0].id) return null;
+  function handleDeleteList(activeListId = activeList) {
+    if (activeListId === lists[0].id) return null;
     const newList = lists.filter((list) => {
-      return list.id !== activeList;
+      return list.id !== activeListId;
     });
-    newList[newList.length - 1]
-      ? setActiveList(newList[newList.length - 1].id)
-      : setActiveList(null);
+    setActiveList(newList[0].id);
     setLists(newList);
   }
 
@@ -198,6 +196,10 @@ function App() {
           {lists.map((list) => (
             <ListItem
               key={list.id}
+              listId={list.id}
+              myDayId={lists[0].id}
+              setActive={setActiveList}
+              deleteList={handleDeleteList}
               icon={<ListIconWrapper />}
               text={list.name}
               onTextClick={() => setActiveList(list.id)}
